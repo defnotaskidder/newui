@@ -10,6 +10,8 @@ if Library then
     Library:Unload()
 end
 
+_G.ScootSliderDragging = false
+
 local LoadTick = os.clock()
 
 local Library do
@@ -463,8 +465,13 @@ local Library do
 
             local InputChanged
 
-            self:Connect("InputBegan", function(Input)
+         self:Connect("InputBegan", function(Input)
                 if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                    -- SLIDER FIX: Don't start window drag if slider is being dragged
+                    if _G.ScootSliderDragging then
+                        return
+                    end
+                    
                     Dragging = true
 
                     DragStart = Input.Position
@@ -1955,24 +1962,33 @@ local Library do
                     end
 
                     InputChanged = Input.Changed:Connect(function()
+         Items["RealSlider"]:Connect("InputBegan", function(Input)
+                if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                    Slider.Sliding = true 
+                    
+                    -- SLIDER FIX: Set global flag to prevent window dragging
+                    _G.ScootSliderDragging = true
+
+                    local SizeX = (Mouse.X - Items["RealSlider"].Instance.AbsolutePosition.X) / Items["RealSlider"].Instance.AbsoluteSize.X
+                    local Value = ((Data.Max - Data.Min) * SizeX) + Data.Min
+
+                    Slider:Set(Value)
+
+                    if InputChanged then
+                        return
+                    end
+
+                    InputChanged = Input.Changed:Connect(function()
                         if Input.UserInputState == Enum.UserInputState.End then
                             Slider.Sliding = false
+                            
+                            -- SLIDER FIX: Clear global flag when done
+                            _G.ScootSliderDragging = false
                             
                             InputChanged:Disconnect()
                             InputChanged = nil
                         end
                     end)
-                end
-            end)
-
-            Library:Connect(UserInputService.InputChanged, function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
-                    if Slider.Sliding then
-                        local SizeX = (Mouse.X - Items["RealSlider"].Instance.AbsolutePosition.X) / Items["RealSlider"].Instance.AbsoluteSize.X
-                        local Value = ((Data.Max - Data.Min) * SizeX) + Data.Min
-
-                        Slider:Set(Value)
-                    end
                 end
             end)
 
