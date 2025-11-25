@@ -14,7 +14,6 @@ end
 _G.ScootSliderDragging = false
 
 local LoadTick = os.clock()
-local LoadTick = os.clock()
 
 local Library do
     local Workspace = game:GetService("Workspace")
