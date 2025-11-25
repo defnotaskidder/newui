@@ -10,7 +10,6 @@ if Library then
     Library:Unload()
 end
 
-_G.ScootSliderDragging = false
 
 local LoadTick = os.clock()
 
