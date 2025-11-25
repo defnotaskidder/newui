@@ -5212,7 +5212,7 @@ local Library do
                 ScaleType = Enum.ScaleType.Fit,
                 BorderColor3 = FromRGB(0, 0, 0),
                 AnchorPoint = Vector2New(0.5, 0),
-                Image = "rbxassetid://" .. Window.Logo,
+                Image = "rbxassetid://103932843305381" .. Window.Logo,
                 BackgroundTransparency = 1,
                 Position = UDim2New(0.5, 0, 0, 12),
                 Size = UDim2New(0, 75, 0, 75),
