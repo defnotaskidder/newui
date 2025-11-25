@@ -10,6 +10,10 @@ if Library then
     Library:Unload()
 end
 
+-- SLIDER FIX: Global flag to track slider dragging state
+_G.ScootSliderDragging = false
+
+local LoadTick = os.clock()
 local LoadTick = os.clock()
 
 local Library do
@@ -465,7 +469,14 @@ local Library do
 
             self:Connect("InputBegan", function(Input)
                 if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                    -- SLIDER FIX: Don't start window drag if slider is being dragged
+                    if _G.ScootSliderDragging then
+                        return
+                    end
+                    
                     Dragging = true
+                    MousePosition = Input.Position
+                    ItemPosition = self.Instance.Position
 
                     DragStart = Input.Position
                     StartPosition = Gui.Position
@@ -1944,6 +1955,9 @@ local Library do
             Items["RealSlider"]:Connect("InputBegan", function(Input)
                 if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
                     Slider.Sliding = true 
+                    
+                    -- SLIDER FIX: Set global flag to prevent window dragging
+                    _G.ScootSliderDragging = true
 
                     local SizeX = (Mouse.X - Items["RealSlider"].Instance.AbsolutePosition.X) / Items["RealSlider"].Instance.AbsoluteSize.X
                     local Value = ((Data.Max - Data.Min) * SizeX) + Data.Min
@@ -1957,6 +1971,9 @@ local Library do
                     InputChanged = Input.Changed:Connect(function()
                         if Input.UserInputState == Enum.UserInputState.End then
                             Slider.Sliding = false
+                            
+                            -- SLIDER FIX: Clear global flag when done
+                            _G.ScootSliderDragging = false
                             
                             InputChanged:Disconnect()
                             InputChanged = nil
