@@ -5261,7 +5261,7 @@ Items["Side"]:Border("Border")
                 ScaleType = Enum.ScaleType.Fit,
                 BorderColor3 = FromRGB(0, 0, 0),
                 AnchorPoint = Vector2New(0.5, 0),
-                Image = "rbxassetid://85446714239967" .. Window.Logo,
+                Image = "rbxassetid://" .. Window.Logo,
                 BackgroundTransparency = 1,
                 Position = UDim2New(0.5, 0, 0, 12),
                 Size = UDim2New(0, 75, 0, 75),
