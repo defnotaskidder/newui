@@ -5217,9 +5217,42 @@ local Library do
                 BackgroundColor3 = FromRGB(20, 24, 21)
             })  Items["Side"]:AddToTheme({BackgroundColor3 = "Inline", BorderColor3 = "Outline"})
             
-            Items["Side"]:Border("Border")
-
+Items["Side"]:Border("Border")
             Items["Window"].Instance.Visible = false
+
+            -- LOGO FIX: Add logo ImageLabel to top-left of Side panel
+            if Window.Logo and Window.Logo ~= "" and Window.Logo ~= "0" then
+                Items["Logo"] = Instances:Create("ImageLabel", {
+                    Parent = Items["Side"].Instance,
+                    Name = "Logo",
+                    BackgroundTransparency = 1,
+                    Position = UDim2New(0.5, 0, 0, 8),
+                    AnchorPoint = Vector2New(0.5, 0),
+                    Size = UDim2New(0, 80, 0, 80),
+                    Image = "rbxassetid://" .. tostring(Window.Logo),
+                    ScaleType = Enum.ScaleType.Fit,
+                    ImageColor3 = FromRGB(255, 255, 255)
+                })
+                Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+            else
+                -- No logo provided, show title text instead
+                Items["TitleLabel"] = Instances:Create("TextLabel", {
+                    Parent = Items["Side"].Instance,
+                    Name = "Title",
+                    BackgroundTransparency = 1,
+                    Position = UDim2New(0.5, 0, 0, 30),
+                    AnchorPoint = Vector2New(0.5, 0.5),
+                    Size = UDim2New(1, -16, 0, 40),
+                    Text = Data.Name or "UI",
+                    TextColor3 = FromRGB(235, 235, 235),
+                    TextSize = 18,
+                    FontFace = Library.Font,
+                    TextXAlignment = Enum.TextXAlignment.Center
+                })
+                Items["TitleLabel"]:AddToTheme({TextColor3 = "Text"})
+                Items["TitleLabel"]:TextBorder()
+            end
+
 
             Items["Logo"] = Instances:Create("ImageLabel", {
                 Parent = Items["Side"].Instance,
